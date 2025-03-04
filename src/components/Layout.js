@@ -7,16 +7,15 @@ import {
 } from '@mui/material';
 import Sidebar, { SidebarToggle } from './Sidebar';
 
-function Layout() {
-  const theme = useTheme();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+const Layout = ({ children }) => {
+  const [open, setOpen] = useState(false);
 
   const handleToggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
+    setOpen(!open);
   };
 
   const handleCloseSidebar = () => {
-    setSidebarOpen(false);
+    setOpen(false);
   };
 
   return (
@@ -27,7 +26,7 @@ function Layout() {
       <SidebarToggle onClick={handleToggleSidebar} />
       
       {/* Responsive sidebar */}
-      <Sidebar open={sidebarOpen} onClose={handleCloseSidebar} />
+      <Sidebar open={open} onClose={handleCloseSidebar} />
       
       {/* Main content */}
       <Box

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { EventService } from '../services/api';
 import {
@@ -22,7 +22,14 @@ import {
   FormControl,
   InputLabel,
   Card,
-  CardContent
+  CardContent,
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow
 } from '@mui/material';
 import {
   Edit as EditIcon,
@@ -38,11 +45,8 @@ import {
 import '../styles/EventList.css';
 import { format } from 'date-fns';
 
-
-
 function EventList() {
-  const [upcomingEvents, setUpcomingEvents] = useState([]);
-  const [completedEvents, setCompletedEvents] = useState([]);
+  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -53,11 +57,7 @@ function EventList() {
   const [winnersModalOpen, setWinnersModalOpen] = useState(false);
   const [winners, setWinners] = useState({ first: '', second: '', third: '' });
 
-  useEffect(() => {
-    fetchEvents();
-  }, [filterCategory, filterType]);
-
-  const fetchEvents = async () => {
+  const fetchEvents = useCallback(async () => {
     try {
       setLoading(true);
       const filters = {};
@@ -70,8 +70,7 @@ function EventList() {
         EventService.getEvents({ ...filters, status: 'completed' })
       ]);
       
-      setUpcomingEvents(upcomingData);
-      setCompletedEvents(completedData);
+      setEvents(upcomingData.concat(completedData));
       setError('');
     } catch (err) {
       console.error('Error fetching events:', err);
@@ -79,7 +78,11 @@ function EventList() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filterCategory, filterType]);
+
+  useEffect(() => {
+    fetchEvents();
+  }, [fetchEvents]);
 
   const handleDeleteClick = (event) => {
     setSelectedEvent(event);
@@ -91,8 +94,7 @@ function EventList() {
     
     try {
       await EventService.deleteEvent(selectedEvent._id || selectedEvent.id);
-      setUpcomingEvents(upcomingEvents.filter(e => (e._id || e.id) !== (selectedEvent._id || selectedEvent.id)));
-      setCompletedEvents(completedEvents.filter(e => (e._id || e.id) !== (selectedEvent._id || selectedEvent.id)));
+      setEvents(events.filter(e => (e._id || e.id) !== (selectedEvent._id || selectedEvent.id)));
       setDeleteDialogOpen(false);
       setSelectedEvent(null);
     } catch (err) {
@@ -188,8 +190,8 @@ function EventList() {
       // Add or update winners using the new API
       const updatedWinners = await EventService.addWinners(selectedEvent._id || selectedEvent.id, winners);
       
-      // Update the completedEvents state with the new winners
-      setCompletedEvents(completedEvents.map(event => 
+      // Update the events state with the new winners
+      setEvents(events.map(event => 
         (event._id || event.id) === (selectedEvent._id || selectedEvent.id)
           ? { ...event, winners: updatedWinners }
           : event
@@ -457,9 +459,9 @@ function EventList() {
             <Typography variant="h5" sx={{ mb: 3, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
               <CalendarIcon /> Upcoming Events
             </Typography>
-            {getFilteredEvents(upcomingEvents).length > 0 ? (
+            {getFilteredEvents(events).length > 0 ? (
               <Grid container spacing={2}>
-                {renderEventCards(upcomingEvents)}
+                {renderEventCards(events)}
               </Grid>
             ) : (
               <Box sx={{ textAlign: 'center', py: 4, backgroundColor: '#f8f8f8', borderRadius: 2 }}>
@@ -475,9 +477,9 @@ function EventList() {
             <Typography variant="h5" sx={{ mb: 3, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
               <CheckCircleIcon /> Completed Events
             </Typography>
-            {getFilteredEvents(completedEvents).length > 0 ? (
+            {getFilteredEvents(events).length > 0 ? (
               <Grid container spacing={2}>
-                {renderEventCards(completedEvents, true)}
+                {renderEventCards(events, true)}
               </Grid>
             ) : (
               <Box sx={{ textAlign: 'center', py: 4, backgroundColor: '#f8f8f8', borderRadius: 2 }}>

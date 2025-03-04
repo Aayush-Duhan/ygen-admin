@@ -329,11 +329,8 @@ function EventForm() {
     }));
   };
 
-  const handleTimeChange = (field) => (value) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+  const handleTimeChange = (event) => {
+    setFormData({ ...formData, time: event.target.value });
   };
 
   return (
@@ -457,7 +454,7 @@ function EventForm() {
                     <TimePickerField
                       label="Start Time"
                       value={formData.startTime}
-                      onChange={handleTimeChange('startTime')}
+                      onChange={handleTimeChange}
                       required
                     />
                   </Grid>
@@ -465,7 +462,7 @@ function EventForm() {
                     <TimePickerField
                       label="End Time"
                       value={formData.endTime}
-                      onChange={handleTimeChange('endTime')}
+                      onChange={handleTimeChange}
                       helperText="Optional for events with specific end time"
                     />
                   </Grid>
