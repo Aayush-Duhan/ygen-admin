@@ -322,12 +322,6 @@ function EventForm() {
     }
   };
 
-  const handleDateChange = (date) => {
-    setFormData(prev => ({
-      ...prev,
-      date: format(date, 'MMM d, yyyy')
-    }));
-  };
 
   const handleTimeChange = (event) => {
     setFormData({ ...formData, time: event.target.value });

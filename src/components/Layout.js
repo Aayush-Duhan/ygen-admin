@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import {
   Box,
-  CssBaseline,
-  useTheme
+  CssBaseline
 } from '@mui/material';
 import Sidebar, { SidebarToggle } from './Sidebar';
 

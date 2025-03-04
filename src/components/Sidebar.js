@@ -16,13 +16,9 @@ import {
   useMediaQuery,
   useTheme
 } from '@mui/material';
-import { Link } from 'react-router-dom';
 import EventIcon from '@mui/icons-material/Event';
-import GroupIcon from '@mui/icons-material/Group';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
-  Dashboard as DashboardIcon,
-  Settings as SettingsIcon,
   Close as CloseIcon,
   Logout as LogoutIcon
 } from '@mui/icons-material';
