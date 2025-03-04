@@ -202,6 +202,26 @@ function EventList() {
     setWinners({ first: '', second: '', third: '' });
   };
 
+  const isEventCompleted = (event) => {
+    if (!event.date) return false;
+    
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to start of day for accurate comparison
+    
+    // If it's a date range
+    if (event.date.includes('-')) {
+      const [, endDate] = event.date.split('-').map(d => d.trim());
+      const eventEndDate = new Date(endDate);
+      eventEndDate.setHours(0, 0, 0, 0);
+      return eventEndDate < today;
+    }
+    
+    // Single date
+    const eventDate = new Date(event.date);
+    eventDate.setHours(0, 0, 0, 0);
+    return eventDate < today;
+  };
+
   const renderEventCards = (events, isCompleted = false) => {
     return getFilteredEvents(events).map((event) => (
       <Grid item xs={12} sm={6} lg={4} key={event.id}>
@@ -448,9 +468,9 @@ function EventList() {
             <Typography variant="h5" sx={{ mb: 3, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
               <CalendarIcon /> Upcoming Events
             </Typography>
-            {getFilteredEvents(events).length > 0 ? (
+            {getFilteredEvents(events.filter(event => !isEventCompleted(event))).length > 0 ? (
               <Grid container spacing={2}>
-                {renderEventCards(events)}
+                {renderEventCards(events.filter(event => !isEventCompleted(event)))}
               </Grid>
             ) : (
               <Box sx={{ textAlign: 'center', py: 4, backgroundColor: '#f8f8f8', borderRadius: 2 }}>
@@ -466,9 +486,9 @@ function EventList() {
             <Typography variant="h5" sx={{ mb: 3, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
               <CheckCircleIcon /> Completed Events
             </Typography>
-            {getFilteredEvents(events).length > 0 ? (
+            {getFilteredEvents(events.filter(event => isEventCompleted(event))).length > 0 ? (
               <Grid container spacing={2}>
-                {renderEventCards(events, true)}
+                {renderEventCards(events.filter(event => isEventCompleted(event)), true)}
               </Grid>
             ) : (
               <Box sx={{ textAlign: 'center', py: 4, backgroundColor: '#f8f8f8', borderRadius: 2 }}>
