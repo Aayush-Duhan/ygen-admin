@@ -225,7 +225,7 @@ function EventList() {
                   <CalendarIcon fontSize="small" />
                 </div>
                 <Typography variant="body2" sx={{ ml: 1 }}>
-                  {formatDate(event.startDate)}
+                  {formatDate(event.date)}
                 </Typography>
               </div>
               <div className="event-card__detail">
