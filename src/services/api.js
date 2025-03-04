@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create an axios instance with default config
 const API = axios.create({
-  baseURL: 'https://ygen-server-production.up.railway.app/api',
+  baseURL: 'https://ygen-server.onrender.com/api',
   headers: {
     'Content-Type': 'application/json'
   }
