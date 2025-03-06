@@ -19,7 +19,12 @@ import {
 } from '@mui/material';
 import { Save as SaveIcon, ArrowBack as ArrowBackIcon } from '@mui/icons-material';
 import { format, parse } from 'date-fns';
-
+const handleTimeChange = (type, newValue) => {
+  const timeValue = parseTimeValue(value);
+  const updatedTime = {
+    ...timeValue,
+    [type]: newValue
+  };
 // Custom TimePickerField component
 const TimePickerField = ({ label, value, onChange, required, helperText }) => {
   // Parse the current value
@@ -437,22 +442,26 @@ function EventForm() {
                 </Grid>
               </Grid>
               
-              <Grid item xs={12}>
-  <TimePickerField
-    label="Start Time"
-    value={formData.startTime}
-    onChange={(newTime) => setFormData((prev) => ({ ...prev, startTime: newTime }))}
-    required
-  />
-</Grid>
-<Grid item xs={12}>
-  <TimePickerField
-    label="End Time"
-    value={formData.endTime}
-    onChange={(newTime) => setFormData((prev) => ({ ...prev, endTime: newTime }))}
-    helperText="Optional for events with specific end time"
-  />
-</Grid>
+              <Grid item xs={12} sm={6}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <TimePickerField
+                      label="Start Time"
+                      value={formData.startTime}
+                      onChange={handleTimeChange}
+                      required
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TimePickerField
+                      label="End Time"
+                      value={formData.endTime}
+                      onChange={handleTimeChange}
+                      helperText="Optional for events with specific end time"
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
               
             
               <Grid item xs={12}>
