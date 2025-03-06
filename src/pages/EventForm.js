@@ -241,23 +241,60 @@ function EventForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => {
-      const newData = {
+    
+    // Special handling for image field to parse Google Drive links
+    if (name === 'image') {
+      const parsedUrl = parseGoogleDriveLink(value);
+      setFormData(prev => ({
         ...prev,
-        [name]: value
-      };
+        [name]: parsedUrl || value
+      }));
+    } else {
+      setFormData(prev => {
+        const newData = {
+          ...prev,
+          [name]: value
+        };
 
-      // If start date is after end date, update end date
-      if (name === 'startDate' && newData.endDate && value > newData.endDate) {
-        newData.endDate = value;
-      }
-      // If end date is before start date, update start date
-      if (name === 'endDate' && newData.startDate && value < newData.startDate) {
-        newData.startDate = value;
-      }
+        // If start date is after end date, update end date
+        if (name === 'startDate' && newData.endDate && value > newData.endDate) {
+          newData.endDate = value;
+        }
+        // If end date is before start date, update start date
+        if (name === 'endDate' && newData.startDate && value < newData.startDate) {
+          newData.startDate = value;
+        }
 
-      return newData;
-    });
+        return newData;
+      });
+    }
+  };
+
+  // Function to parse Google Drive links and convert to direct image URLs
+  const parseGoogleDriveLink = (url) => {
+    if (!url) return '';
+    
+    // Check if it's a Google Drive link
+    const driveRegex = /https:\/\/drive\.google\.com\/file\/d\/([\w-]+)(\/view)?/i;
+    const match = url.match(driveRegex);
+    
+    if (match && match[1]) {
+      // Extract the file ID and create a direct link
+      const fileId = match[1];
+      return `https://drive.google.com/uc?export=view&id=${fileId}`;
+    }
+    
+    // Also handle drive.google.com/open?id= format
+    const openRegex = /https:\/\/drive\.google\.com\/open\?id=([\w-]+)/i;
+    const openMatch = url.match(openRegex);
+    
+    if (openMatch && openMatch[1]) {
+      const fileId = openMatch[1];
+      return `https://drive.google.com/uc?export=view&id=${fileId}`;
+    }
+    
+    // Return the original URL if it's not a Google Drive link
+    return url;
   };
 
   const handleSubmit = async (e) => {
@@ -323,8 +360,8 @@ function EventForm() {
   };
 
 
-  const handleTimeChange = (event) => {
-    setFormData({ ...formData, time: event.target.value });
+  const handleTimeChange = (field, timeValue) => {
+    setFormData({ ...formData, [field]: timeValue });
   };
 
   return (
@@ -448,7 +485,7 @@ function EventForm() {
                     <TimePickerField
                       label="Start Time"
                       value={formData.startTime}
-                      onChange={handleTimeChange}
+                      onChange={(value) => handleTimeChange('startTime', value)}
                       required
                     />
                   </Grid>
@@ -456,7 +493,7 @@ function EventForm() {
                     <TimePickerField
                       label="End Time"
                       value={formData.endTime}
-                      onChange={handleTimeChange}
+                      onChange={(value) => handleTimeChange('endTime', value)}
                       helperText="Optional for events with specific end time"
                     />
                   </Grid>
@@ -485,8 +522,8 @@ function EventForm() {
                   onChange={handleChange}
                   required
                   variant="outlined"
-                  placeholder="https://example.com/image.jpg"
-                  helperText="Enter a URL for the event image"
+                  placeholder="https://example.com/image.jpg or Google Drive link"
+                  helperText="Enter a URL or Google Drive link for the event image"
                 />
               </Grid>
               

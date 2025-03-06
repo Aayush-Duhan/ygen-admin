@@ -119,15 +119,10 @@ const AuthService = {
   // Login user
   login: async (email, password) => {
     try {
-      // For demo purposes, we'll simulate a login
-      // In a real app, this would be an API call
-      if (email === 'admin@ygen.com' && password === 'admin123') {
-        const user = { email, name: 'Admin User' };
-        localStorage.setItem('adminUser', JSON.stringify(user));
-        return user;
-      } else {
-        throw new Error('Invalid email or password');
-      }
+      const response = await API.post('/auth/login', { email, password });
+      const data = response.data;
+      localStorage.setItem('adminUser', JSON.stringify(data));
+      return data.user;
     } catch (error) {
       console.error('Login error:', error);
       throw error;
