@@ -11,6 +11,7 @@ import './styles/AdminPortal.css';
 import Login from './pages/Login';
 import EventForm from './pages/EventForm';
 import EventList from './pages/EventList';
+import Register from './pages/Register'
 
 // Components
 import Layout from './components/Layout';
@@ -302,11 +303,11 @@ const neubrutalistTheme = createTheme({
 // Protected route component
 const ProtectedRoute = ({ children }) => {
   const { currentUser } = useAuth();
-  
+
   if (!currentUser) {
     return <Navigate to="/login" />;
   }
-  
+
   return children;
 };
 
@@ -317,6 +318,7 @@ function App() {
       <div className="admin-layout">
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />  
           <Route path="/" element={
             <ProtectedRoute>
               <Layout />
@@ -328,6 +330,7 @@ function App() {
             <Route path="events/edit/:id" element={<EventForm />} />
           </Route>
         </Routes>
+
       </div>
     </ThemeProvider>
   );

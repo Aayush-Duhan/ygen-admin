@@ -12,13 +12,18 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Check if user is already logged in (from localStorage)
+  // Check if user is already logged in (from localStorage and backend)
   useEffect(() => {
-    const user = localStorage.getItem('adminUser');
-    if (user) {
-      setCurrentUser(JSON.parse(user));
+    async function fetchUser() {
+      const user = await AuthService.getCurrentUser();
+      if (user) {
+        setCurrentUser(user);
+      } else {
+        AuthService.logout(); // Ensure invalid sessions are removed
+      }
+      setLoading(false);
     }
-    setLoading(false);
+    fetchUser();
   }, []);
 
   // Login function that uses the AuthService
@@ -29,7 +34,7 @@ export function AuthProvider({ children }) {
       setCurrentUser(user);
       return user;
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.message || 'Login failed');
       throw err;
     }
   }
@@ -43,7 +48,7 @@ export function AuthProvider({ children }) {
     currentUser,
     login,
     logout,
-    error
+    error,
   };
 
   return (

@@ -67,7 +67,6 @@ function Login() {
       sx={{ 
         backgroundColor: '#FFFFF2',
         position: 'relative',
-        backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23000000\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
         overflow: 'hidden',
         height: '100vh',
         margin: 0,
@@ -258,7 +257,6 @@ function Login() {
                 borderRadius: 0,
                 fontSize: '1rem',
                 fontWeight: 700,
-                letterSpacing: '-0.5px',
                 backgroundColor: '#0066FF',
                 color: 'white',
                 border: '2px solid #000000',
@@ -268,43 +266,17 @@ function Login() {
                   backgroundColor: '#0066FF',
                   transform: 'translate(-2px, -2px)',
                   boxShadow: '7px 7px 0px 0px #000000',
-                },
-                '&:active': {
-                  transform: 'translate(2px, 2px)',
-                  boxShadow: '3px 3px 0px 0px #000000',
-                },
-                '&.Mui-disabled': {
-                  backgroundColor: '#E0E0E0',
-                  color: '#888888',
-                  border: '2px solid #888888',
-                  boxShadow: '5px 5px 0px 0px #888888',
                 }
               }}
             >
-              {loading ? (
-                <CircularProgress size={24} color="inherit" /> 
-              ) : (
-                'Sign In'
-              )}
+              {loading ? <CircularProgress size={24} color="inherit" /> : 'Sign In'}
             </Button>
-            
-            <Box 
-              sx={{ 
-                mt: 3, 
-                p: 2, 
-                backgroundColor: '#FFD600',
-                border: '2px solid #000000',
-                boxShadow: '4px 4px 0px 0px #000000',
-              }}
-            >
-              <Typography variant="body2" sx={{ color: '#000000', fontWeight: 700, mb: 0.5 }}>
-                Demo credentials
-              </Typography>
-              <Typography variant="body2" sx={{ color: '#000000', fontFamily: "'Space Mono', monospace" }}>
-                admin@ygen.com | admin123
-              </Typography>
-            </Box>
           </Box>
+
+          <Typography sx={{ mt: 2, textAlign: 'center' }}>
+            Don't have an account? <a href="/register" style={{ color: '#0066FF', fontWeight: 'bold' }}>Sign up here</a>
+          </Typography>
+
         </CardContent>
       </Card>
     </Box>
