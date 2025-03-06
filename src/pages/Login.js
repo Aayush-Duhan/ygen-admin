@@ -287,23 +287,6 @@ function Login() {
                 'Sign In'
               )}
             </Button>
-            
-            <Box 
-              sx={{ 
-                mt: 3, 
-                p: 2, 
-                backgroundColor: '#FFD600',
-                border: '2px solid #000000',
-                boxShadow: '4px 4px 0px 0px #000000',
-              }}
-            >
-              <Typography variant="body2" sx={{ color: '#000000', fontWeight: 700, mb: 0.5 }}>
-                Demo credentials
-              </Typography>
-              <Typography variant="body2" sx={{ color: '#000000', fontFamily: "'Space Mono', monospace" }}>
-                admin@ygen.com | admin123
-              </Typography>
-            </Box>
           </Box>
         </CardContent>
       </Card>
