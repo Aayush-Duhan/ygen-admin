@@ -19,12 +19,7 @@ import {
 } from '@mui/material';
 import { Save as SaveIcon, ArrowBack as ArrowBackIcon } from '@mui/icons-material';
 import { format, parse } from 'date-fns';
-const handleTimeChange = (type, newValue) => {
-  const timeValue = parseTimeValue(value);
-  const updatedTime = {
-    ...timeValue,
-    [type]: newValue
-  };
+
 // Custom TimePickerField component
 const TimePickerField = ({ label, value, onChange, required, helperText }) => {
   // Parse the current value
@@ -45,7 +40,12 @@ const TimePickerField = ({ label, value, onChange, required, helperText }) => {
 
   const { hour, minute, period } = parseTimeValue(value);
 
-  
+  const handleTimeChange = (type, newValue) => {
+    const timeValue = parseTimeValue(value);
+    const updatedTime = {
+      ...timeValue,
+      [type]: newValue
+    };
     
     const formattedTime = `${updatedTime.hour}:${updatedTime.minute} ${updatedTime.period}`;
     onChange(formattedTime);
@@ -463,7 +463,6 @@ function EventForm() {
                 </Grid>
               </Grid>
               
-            
               <Grid item xs={12}>
                 <TextField
                   fullWidth
